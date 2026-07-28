@@ -1,0 +1,49 @@
+.kanban-column{
+
+    min-width:300px;
+
+    background:#f8fafc;
+
+    border-radius:15px;
+
+    padding:18px;
+
+}
+
+.column-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.column-header h2{
+
+    font-size:18px;
+
+}
+
+.column-header span{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+}
+
+.column-body{
+
+    min-height:500px;
+
+}

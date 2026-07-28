@@ -1,0 +1,35 @@
+.lead-log{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+.lead-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.lead-header h1{
+    font-size:30px;
+    color:#111827;
+}
+
+.lead-header p{
+    color:#6b7280;
+    margin-top:5px;
+}
+
+.add-btn{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.add-btn:hover{
+    background:#1d4ed8;
+}

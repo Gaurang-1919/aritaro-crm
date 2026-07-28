@@ -1,0 +1,120 @@
+.navbar {
+    height: 75px;
+    background: white;
+    padding: 0 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.navbar-left h2 {
+    color: #111827;
+    font-size: 24px;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    width: 320px;
+
+    background: #f3f4f6;
+
+    border-radius: 10px;
+
+    padding: 10px 15px;
+}
+
+.search-icon {
+    color: gray;
+}
+
+.search-box input {
+
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    margin-left: 10px;
+
+    font-size: 15px;
+}
+
+.notification-btn {
+
+    position: relative;
+
+    width: 45px;
+
+    height: 45px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+.notification-dot {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 12px;
+
+    width: 8px;
+
+    height: 8px;
+
+    background: red;
+
+    border-radius: 50%;
+}
+
+.profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.profile-icon {
+
+    font-size: 42px;
+
+    color: #2563eb;
+}
+
+.profile-info h4 {
+
+    font-size: 16px;
+
+    color: #111827;
+}
+
+.profile-info p {
+
+    color: gray;
+
+    font-size: 13px;
+}

@@ -1,0 +1,33 @@
+.dashboard{
+
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+
+}
+
+.dashboard-title{
+
+    font-size:30px;
+    font-weight:700;
+    color:#111827;
+
+}
+
+.dashboard-row{
+
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+
+}
+
+@media(max-width:1000px){
+
+.dashboard-row{
+
+grid-template-columns:1fr;
+
+}
+
+}

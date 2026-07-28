@@ -1,0 +1,27 @@
+.status{
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-size:13px;
+
+font-weight:600;
+
+color:white;
+
+}
+
+.new{background:#3b82f6;}
+
+.proposal{background:#f59e0b;}
+
+.deposit{background:#8b5cf6;}
+
+.follow-up{background:#ef4444;}
+
+.meeting-follow-up{background:#06b6d4;}
+
+.won{background:#22c55e;}
+
+.lost{background:#6b7280;}

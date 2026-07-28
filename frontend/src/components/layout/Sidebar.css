@@ -1,0 +1,75 @@
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #111827;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.logo {
+    padding: 25px;
+    text-align: center;
+    border-bottom: 1px solid #1f2937;
+}
+
+.logo h2 {
+    color: white;
+    font-size: 24px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #d1d5db;
+    text-decoration: none;
+    padding: 15px 25px;
+    transition: 0.3s;
+}
+
+.menu-link:hover {
+    background: #1f2937;
+    color: white;
+}
+
+.menu-link.active {
+    background: #2563eb;
+    color: white;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.logout {
+    padding: 20px;
+    border-top: 1px solid #1f2937;
+}
+
+.logout button {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: #dc2626;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.logout button:hover {
+    background: #b91c1c;
+}

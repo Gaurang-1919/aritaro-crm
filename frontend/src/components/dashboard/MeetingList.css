@@ -1,0 +1,83 @@
+.meeting-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+}
+
+.meeting-card h2{
+
+    margin-bottom:20px;
+
+    color:#111827;
+
+}
+
+.meeting-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.meeting-item{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+.avatar{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:bold;
+
+}
+
+.meeting-info{
+
+    flex:1;
+
+    margin-left:15px;
+
+}
+
+.meeting-info h4{
+
+    color:#111827;
+
+}
+
+.meeting-info p{
+
+    color:gray;
+
+    font-size:13px;
+
+}
