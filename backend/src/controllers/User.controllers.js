@@ -39,3 +39,4 @@ const userRegister=asyncHandler(async(req,res)=>{
 
 });
 
+export default userRegister
