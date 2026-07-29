@@ -1,6 +1,6 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import apierror from "../utils/apierror.js";
-import apiresponse from "../utils/apiresponse";
+import apiresponse from "../utils/apiresponse.js";
 import User from "../models/User.models.js";
 
 const userRegister=asyncHandler(async(req,res)=>{
@@ -23,7 +23,7 @@ const userRegister=asyncHandler(async(req,res)=>{
     const existedUser=await User.findOne({email}).select("+password")
 
     if(existedUser){
-        throw new apierror(201,"User already exists")
+        throw new apierror(409,"User already exists")
     }
 
     const user=await User.create(
