@@ -40,4 +40,5 @@ const followUpSchema = new mongoose.Schema(
   }
 );
 
-export default FollowUp=mongoose.model("FollowUp", followUpSchema);
+const FollowUp = mongoose.model("FollowUp", followUpSchema);
+export default FollowUp;
