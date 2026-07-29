@@ -7,7 +7,7 @@ import {
     getCurrentUser,
     changePassword,
 } from "../controllers/auth.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { verifyJWT } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 //Public Routes//
