@@ -11,10 +11,10 @@ const generateTokens=async(userId)=>{
         if (!user) {
                throw new apierror(404, "User not found while generating tokens");
         }
-        const accessToken=await user.generateAccessToken();
-        const refreshToken=await user.generateRefreshToken();
+        const accessToken = await user.generateAccessToken();
+        const refreshToken = await user.generateRefreshToken();
           
-        user.refreshToken=refreshToken;
+        user.refreshToken = refreshToken;
         await user.save({validateBeforeSave:false});
 
         return {accessToken,refreshToken};
