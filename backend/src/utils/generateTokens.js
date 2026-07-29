@@ -1,6 +1,6 @@
-import asyncHandler from "./utils/asyncHandler.js";
+import asyncHandler from "./asyncHandler.js";
 import User from "../models/User.models.js";
-import apierror from "./utils/apierror.js";
+import apierror from "./apierror.js";
 
 
 const generateTokens=async(userId)=>{
