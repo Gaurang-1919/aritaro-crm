@@ -879,3 +879,17 @@ const getRecentActivities = asyncHandler(async (req, res) => {
         )
     );
 });
+
+export {
+    getDashboardOverview,
+    getKanbanSummary,
+    getLeadSourceAnalytics,
+    getSetterMetrics,
+    getRecentSetterActivity,
+    getCloserMetrics,
+    getCloserRevenueBreakdown,
+    getMoneyMetrics,
+    getRevenueProjection,
+    getLeakReport,
+    getRecentActivities,
+};
