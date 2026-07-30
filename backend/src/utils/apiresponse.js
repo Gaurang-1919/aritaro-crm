@@ -1,10 +1,9 @@
-class apiresponse extends Error{
-    constructor(statusCode,data,message){
-        super(message),
-        this.statusCode=statusCode,
-        this.data=data,
-        this.message=message
-    };
-};
-
-export default apiresponse
+class apiresponse {
+    constructor(statusCode, message, data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+        this.success = statusCode < 400;
+    }
+}
+export default apiresponse;
