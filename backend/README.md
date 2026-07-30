@@ -1,86 +1,413 @@
-Thunder Client test in order.
+# Aritaro CRM
 
-1. Register a user
+Aritaro CRM is a full-stack Customer Relationship Management (CRM) system designed to streamline the complete sales lifecycle—from lead creation to customer conversion. The platform centralizes lead management, conversations, meetings, follow-ups, sales tracking, and business analytics into a single application.
 
-POST http://localhost:3000/api/auth/register
-Body (JSON):
-{
-  "name": "Rahul",
-  "email": "admin@test.com",
-  "password": "test123",
-  "role": "admin"
-}
+---
 
-2. Login (if already registered)
+# Project Overview
 
-POST http://localhost:3000/api/auth/login
-Body (JSON):
+The CRM is built to help sales teams efficiently manage leads, monitor customer interactions, track revenue, and measure team performance while minimizing duplicate data entry through automated business calculations.
 
-{ "email": "admin@test.com", "password": "test123" }
+---
 
-3. Get current user
+# Objectives
 
-GET http://localhost:3000/api/auth/me
+- Centralize customer and lead information
+- Manage the complete lead lifecycle
+- Visual Kanban-based lead management
+- Track conversations, meetings, and follow-ups
+- Assign leads to setters and closers
+- Monitor sales performance
+- Calculate revenue and commissions
+- Generate business projections
+- Identify inactive leads and sales bottlenecks
 
-4.Create a lead
+---
 
-POST http://localhost:3000/api/leads
-Body (JSON):
+# CRM Workflow
 
-{
-  "leadName": "Kunal",
-  "phone": "9999999999",
-  "email": "kunal@gmail.com",
-  "source": "instagram"
-}
+```
+Lead Created
+      │
+      ▼
+First Contact
+      │
+      ▼
+Conversation
+      │
+      ▼
+Meeting Booked
+      │
+      ▼
+Meeting Held
+      │
+      ▼
+Offer Made
+      │
+      ▼
+Follow-Up
+      │
+      ▼
+Won / Lost
+```
 
+---
 
-6. Get all leads
+# Features
 
-GET http://localhost:3000/api/leads
+## Authentication
 
-7. Get one lead
+- Secure Login
+- JWT Authentication
+- Password Encryption
+- Role Based Access Control
 
-GET http://localhost:3000/api/leads/<leadId>
+---
 
-8. Update a lead
+## User Roles
 
-PATCH http://localhost:3000/api/leads/<leadId>
+### Admin / Manager
 
-json
-{ "status": "proposal" }
+- Complete CRM access
+- User Management
+- Reports
+- Dashboard
+- System Configuration
 
-9. Create a conversation
+### Setter
 
-POST http://localhost:3000/api/conversations
+- Create Leads
+- Contact Prospects
+- Schedule Meetings
+- Assign Leads
 
-json
-{
-  "leadId": "<leadId>",
-  "userId": "<your user id from /me>",
-  "notes": "Called and discussed pricing",
-  "outcome": "interested"
-}
-10. Create a meeting
+### Closer
 
-POST http://localhost:3000/api/meetings
+- Manage Meetings
+- Handle Sales
+- Track Revenue
+- Close Deals
 
-json
-{
-  "leadId": "<leadId>",
-  "meetingDate": "2026-08-01T10:00:00.000Z",
-  "status": "scheduled"
-}
+---
 
+# Core Modules
 
-11. Create a follow-up
+## Lead Management
 
-POST http://localhost:3000/api/followups
+- Create Lead
+- Update Lead
+- Delete Lead
+- Search Leads
+- Filter Leads
+- Assign Setter & Closer
+- Lead Status Tracking
 
-json
-{
-  "leadId": "<leadId>",
-  "userId": "<your user id>",
-  "followUpDate": "2026-08-05T10:00:00.000Z",
-  "notes": "Check if they decided"
-}
+---
+
+## Kanban Board
+
+Visual Lead Pipeline
+
+- New
+- Proposal
+- Deposit
+- Follow-Up Ongoing
+- Meeting Follow-Up
+- Won
+- Lost
+
+---
+
+## Conversations
+
+Track every communication with a lead.
+
+- Notes
+- Date
+- Outcome
+- User Activity
+
+---
+
+## Meetings
+
+- Schedule Meetings
+- Meeting Status
+- Meeting Outcome
+- Meeting History
+
+---
+
+## Follow-Ups
+
+- Follow-up Schedule
+- Pending Activities
+- Completed Follow-ups
+- Missed Follow-ups
+
+---
+
+## Dashboard
+
+Business insights including:
+
+- Total Leads
+- Active Leads
+- Won Leads
+- Lost Leads
+- Revenue
+- Deposits
+- Cash Collected
+- Close Rate
+- Offer Rate
+- Average Deal Size
+
+---
+
+## Notifications
+
+Receive reminders for:
+
+- Upcoming Meetings
+- Pending Follow-ups
+- Deposits
+- Lead Activities
+
+---
+
+## Activity Logs
+
+Track every important action performed inside the CRM.
+
+---
+
+# Technology Stack
+
+| Layer | Technology |
+|--------|------------|
+| Frontend | React.js |
+| Backend | Node.js + Express.js |
+| Database | MongoDB |
+| Authentication | JWT |
+| Password Security | bcrypt |
+| Version Control | Git & GitHub |
+
+---
+
+# Backend Modules
+
+```
+Authentication
+
+Users
+
+Leads
+
+Conversations
+
+Meetings
+
+Follow-Ups
+
+Activities
+
+Notifications
+
+Dashboard
+```
+
+---
+
+# Database Collections
+
+```
+Users
+
+Leads
+
+Conversations
+
+Meetings
+
+FollowUps
+
+Activities
+
+Notifications
+```
+
+---
+
+# Backend Folder Structure
+
+```
+backend
+│
+├── src
+│   ├── config
+│   ├── controllers
+│   ├── middlewares
+│   ├── models
+│   ├── routes
+│   ├── services
+│   ├── validators
+│   ├── utils
+│   ├── constants
+│   └── app.js
+│
+├── server.js
+├── package.json
+└── .env
+```
+
+---
+
+# Installation
+
+Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+Navigate to backend
+
+```bash
+cd backend
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Create a `.env` file
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+```
+
+Run the server
+
+```bash
+npm run dev
+```
+
+---
+
+# API Modules
+
+- Authentication
+- User Management
+- Lead Management
+- Kanban Management
+- Conversation Management
+- Meeting Management
+- Follow-Up Management
+- Dashboard
+- Notifications
+
+---
+
+# Development Workflow
+
+```
+Requirements
+
+↓
+
+Planning
+
+↓
+
+Project Setup
+
+↓
+
+Authentication
+
+↓
+
+Lead Management
+
+↓
+
+Kanban
+
+↓
+
+Conversations
+
+↓
+
+Meetings
+
+↓
+
+Follow-Ups
+
+↓
+
+Dashboard
+
+↓
+
+Integration
+
+↓
+
+Testing
+
+↓
+
+Deployment
+```
+
+---
+
+# Team
+
+| Member | Responsibility |
+|---------|---------------|
+| Gaurang | Frontend, Documentation & Project Coordination |
+| Krishna | Backend & Database |
+| Abhishek | Project Support |
+
+---
+
+# MVP
+
+The first release focuses on:
+
+- Authentication
+- User Roles
+- Lead Management
+- Kanban Board
+- Lead Details
+- Conversations
+- Meetings
+- Follow-Ups
+- Basic Dashboard
+- Search & Filters
+
+---
+
+# Future Scope
+
+- Revenue Forecasting
+- Advanced Analytics
+- Performance KPIs
+- Financial Reports
+- Smart Notifications
+- Automation
+- Commission Tracking
+- Business Insights
+
+---
+
+# License
+
+This project is developed for the Aritaro CRM platform for educational and development purposes.
