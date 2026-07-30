@@ -5,7 +5,7 @@ Thunder Client test in order.
 POST http://localhost:3000/api/auth/register
 Body (JSON):
 {
-  "name": "Admin",
+  "name": "Rahul",
   "email": "admin@test.com",
   "password": "test123",
   "role": "admin"
@@ -28,9 +28,9 @@ POST http://localhost:3000/api/leads
 Body (JSON):
 
 {
-  "leadName": "John Doe",
+  "leadName": "Kunal",
   "phone": "9999999999",
-  "email": "john@acme.com",
+  "email": "kunal@gmail.com",
   "source": "instagram"
 }
 
