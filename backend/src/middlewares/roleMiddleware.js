@@ -1,7 +1,6 @@
 import apierror from "../utils/apierror.js";
 
 //Role Based Authorization//
-
 const authorizeRoles = (...allowedRoles) => {
     return (req, res, next) => {
 
