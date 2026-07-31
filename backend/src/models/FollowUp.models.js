@@ -40,5 +40,9 @@ const followUpSchema = new mongoose.Schema(
   }
 );
 
+followUpSchema.index({ userId: 1 });
+followUpSchema.index({ followUpDate: 1 });
+followUpSchema.index({ status: 1 });
+
 const FollowUp = mongoose.model("FollowUp", followUpSchema);
 export default FollowUp;

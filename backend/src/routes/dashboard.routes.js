@@ -12,7 +12,7 @@ import {
   getLeakReport,
   getRecentActivities,
 } from "../controllers/dashboard.controller.js";
-import { verifyJWT } from "../middlewares/authMiddleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 

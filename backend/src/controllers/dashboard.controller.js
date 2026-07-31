@@ -1,17 +1,20 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import apiresponse from "../utils/apiresponse.js";
+import apierror from "../utils/apierror.js";
 
 import Lead from "../models/Lead.models.js";
 import Meeting from "../models/Meeting.models.js";
-import FollowUp from "../models/Follow.models.js";
+import FollowUp from "../models/FollowUp.models.js";
 import Conversation from "../models/Conversation.models.js";
 import User from "../models/User.models.js";
 
 //helper: build filters//
 
-const buildLeadFilter = (query) => {
+const buildLeadFilter = (query, user) => {
     const filter = {};
 
+    filter.isDeleted = false;
+    
     if (query.setter) {
         filter.setter = query.setter;
     }
@@ -36,14 +39,84 @@ const buildLeadFilter = (query) => {
         }
     }
 
+    // Role-based restriction
+    if (user.role === "setter") {
+        filter.setter = user._id;
+    }
+
+    if (user.role === "closer") {
+        filter.closer = user._id;
+    }
+
     return filter;
+};
+
+const buildRelatedFilter = (query, user) => {
+    const meetingFilter = {};
+    const followUpFilter = {};
+    const conversationFilter = {};
+
+    if (query.setter) {
+        meetingFilter.setter = query.setter;
+    }
+
+    if (query.closer) {
+        meetingFilter.closer = query.closer;
+    }
+
+    if (query.setter) {
+        conversationFilter.userId = query.setter;
+        followUpFilter.userId = query.setter;
+    }
+
+    if (user.role === "setter") {
+        meetingFilter.setter = user._id;
+        followUpFilter.userId = user._id;
+        conversationFilter.userId = user._id;
+    }
+
+    if (user.role === "closer") {
+        meetingFilter.closer = user._id;
+        followUpFilter.userId = user._id;
+        conversationFilter.userId = user._id;
+    }
+
+    if (query.from || query.to) {
+
+        const dateFilter = {};
+
+        if (query.from) {
+            dateFilter.$gte = new Date(query.from);
+        }
+
+        if (query.to) {
+            dateFilter.$lte = new Date(query.to);
+        }
+
+        meetingFilter.meetingDate = dateFilter;
+        followUpFilter.followUpDate = dateFilter;
+        conversationFilter.date = dateFilter;
+    }
+
+    return {
+        meetingFilter,
+        followUpFilter,
+        conversationFilter
+    };
 };
 
 //Dashboard Overview//
 
 const getDashboardOverview = asyncHandler(async (req, res) => {
 
-    const filter = buildLeadFilter(req.query);
+    const filter = buildLeadFilter(req.query, req.user);
+
+    const {
+       meetingFilter,
+       followUpFilter,
+       conversationFilter
+    } = buildRelatedFilter(req.query, req.user);
+
     const [
         totalLeads,
         totalUsers,
@@ -57,10 +130,17 @@ const getDashboardOverview = asyncHandler(async (req, res) => {
     ] = await Promise.all([
 
         Lead.countDocuments(filter),
-        User.countDocuments(),
-        Meeting.countDocuments(),
-        FollowUp.countDocuments(),
-        Conversation.countDocuments(),
+
+        (req.user.role === "admin" || req.user.role === "manager")
+            ? User.countDocuments()
+            : Promise.resolve(null),
+
+        Meeting.countDocuments(meetingFilter),
+
+        FollowUp.countDocuments(followUpFilter),
+
+        Conversation.countDocuments(conversationFilter),
+
         Lead.countDocuments({
             ...filter,
             status: "won"
@@ -95,10 +175,8 @@ const getDashboardOverview = asyncHandler(async (req, res) => {
                 wonLeads,
                 lostLeads,
                 proposalLeads,
-                depositLeads
-
+                depositLeads,
             },
-
             "Dashboard overview fetched successfully"
         )
     );
@@ -106,7 +184,7 @@ const getDashboardOverview = asyncHandler(async (req, res) => {
 
 //Kanban Summary//
 const getKanbanSummary = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+    const filter = buildLeadFilter(req.query, req.user);
     const kanban = await Lead.aggregate([
         {
             $match: filter
@@ -143,7 +221,7 @@ const getKanbanSummary = asyncHandler(async (req, res) => {
 
 //Lead Source Analytics//
 const getLeadSourceAnalytics = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+    const filter = buildLeadFilter(req.query, req.user);
     const analytics = await Lead.aggregate([
         {
             $match: filter
@@ -183,7 +261,17 @@ const getLeadSourceAnalytics = asyncHandler(async (req, res) => {
 //Setter Metrics//
 
 const getSetterMetrics = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+
+    if (!["admin", "manager", "setter"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
+    const filter = buildLeadFilter(req.query, req.user);
+
+    const {
+      meetingFilter
+    } = buildRelatedFilter(req.query, req.user);
+
     const totalLeads = await Lead.countDocuments(filter);
     const totalConversations = await Conversation.countDocuments();
     const bookedMeetings = await Lead.countDocuments({
@@ -197,26 +285,32 @@ const getSetterMetrics = asyncHandler(async (req, res) => {
             : ((bookedMeetings / totalConversations) * 100).toFixed(2);
 
     const scheduledCalls = await Meeting.countDocuments({
+       ...meetingFilter,
         status: "scheduled"
     });
 
     const callsTaken = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "show"
     });
 
     const noShows = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "no_show"
     });
 
     const cancelledCalls = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "cancelled"
     });
 
     const rescheduledCalls = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "rescheduled"
     });
 
     const dqMeetings = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "dq"
     });
 
@@ -334,11 +428,25 @@ const getSetterMetrics = asyncHandler(async (req, res) => {
 //Recent Setter Activity//
 
 const getRecentSetterActivity = asyncHandler(async (req, res) => {
-    const activities = await Conversation.find()
-        .populate("leadId")
-        .populate("userId", "name role")
-        .sort({ createdAt: -1 })
-        .limit(20);
+
+    if (!["admin", "manager", "setter"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
+    let query = {};
+
+    if (
+       req.user.role === "setter" ||
+       req.user.role === "closer"
+    ) {
+       query.userId = req.user._id;
+    }
+
+    const activities = await Conversation.find(query)
+       .populate("leadId")
+       .populate("userId", "name role")
+       .sort({ createdAt: -1 })
+       .limit(20);
 
     return res.status(200).json(
         new apiresponse(
@@ -353,9 +461,19 @@ const getRecentSetterActivity = asyncHandler(async (req, res) => {
 
 const getCloserMetrics = asyncHandler(async (req, res) => {
 
-    const filter = buildLeadFilter(req.query);
+    if (!["admin", "manager", "closer"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
+    const filter = buildLeadFilter(req.query, req.user);
+
+    const {
+      meetingFilter,
+      followUpFilter
+    } = buildRelatedFilter(req.query, req.user);
 
     const totalMeetingsTaken = await Meeting.countDocuments({
+        ...meetingFilter,
         status: "show"
     });
 
@@ -434,6 +552,7 @@ const getCloserMetrics = asyncHandler(async (req, res) => {
     const followUpAging = await FollowUp.aggregate([
         {
             $match: {
+                ...followUpFilter,
                 status: "pending"
             }
         },
@@ -497,6 +616,11 @@ const getCloserMetrics = asyncHandler(async (req, res) => {
 //Closer Revenue Breakdown//
 
 const getCloserRevenueBreakdown = asyncHandler(async (req, res) => {
+
+    if (!["admin", "manager"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
     const revenue = await Lead.aggregate([
         {
             $group: {
@@ -539,7 +663,12 @@ const getCloserRevenueBreakdown = asyncHandler(async (req, res) => {
 //Money Metrics//
 
 const getMoneyMetrics = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+
+    if (!["admin", "manager"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
+    const filter = buildLeadFilter(req.query, req.user);
     const money = await Lead.aggregate([
 
         {
@@ -711,7 +840,12 @@ const getMoneyMetrics = asyncHandler(async (req, res) => {
 //Revenue Projection//
 
 const getRevenueProjection = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+
+    if (!["admin", "manager"].includes(req.user.role)) {
+        throw new apierror(403, "Access denied");
+    }
+
+    const filter = buildLeadFilter(req.query, req.user);
     const projection = await Lead.aggregate([
 
         {
@@ -783,7 +917,12 @@ const getRevenueProjection = asyncHandler(async (req, res) => {
 //Alerts & Risk Indicators//
 
 const getLeakReport = asyncHandler(async (req, res) => {
-    const filter = buildLeadFilter(req.query);
+    const filter = buildLeadFilter(req.query, req.user);
+
+     const {
+        meetingFilter
+    } = buildRelatedFilter(req.query, req.user);
+
     const bookingLagAlerts = await Lead.find({
 
         ...filter,
@@ -838,7 +977,7 @@ const getLeakReport = asyncHandler(async (req, res) => {
     });
 
     const noShows = await Meeting.find({
-
+        ...meetingFilter,
         status: "no_show"
     }).populate("leadId");
 
@@ -861,11 +1000,19 @@ const getLeakReport = asyncHandler(async (req, res) => {
 //Recent CRM Activities//
 
 const getRecentActivities = asyncHandler(async (req, res) => {
-    const activities = await Conversation.find()
 
+    let query = {};
+
+    if (
+        req.user.role === "setter" ||
+        req.user.role === "closer"
+    ) {
+        query.userId = req.user._id;
+    }
+
+    const activities = await Conversation.find(query)
         .populate("leadId")
         .populate("userId", "name role")
-
         .sort({
             createdAt: -1
         })

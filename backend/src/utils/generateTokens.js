@@ -1,4 +1,3 @@
-import asyncHandler from "./asyncHandler.js";
 import User from "../models/User.models.js";
 import apierror from "./apierror.js";
 
