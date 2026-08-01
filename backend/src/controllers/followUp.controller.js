@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import apierror from "../utils/apierror.js";
 import apiresponse from "../utils/apiresponse.js";
-import FollowUp from "../models/Follow.models.js";
+import FollowUp from "../models/FollowUp.models.js";
 
 const createFollowUp = asyncHandler(async (req, res) => {
     const followUp = await FollowUp.create(req.body);

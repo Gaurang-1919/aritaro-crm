@@ -150,6 +150,11 @@ const leadSchema = new mongoose.Schema(
       default: "pending",
     },
 
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
     notes: {
       type: String,
       trim: true,
@@ -160,6 +165,25 @@ const leadSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Indexes
+leadSchema.index({ email: 1 });
+leadSchema.index({ phone: 1 });
+leadSchema.index({ status: 1 });
+leadSchema.index({ setter: 1 });
+leadSchema.index({ closer: 1 });
+leadSchema.index({ meetingDate: 1 });
+
+//Compound indexes
+leadSchema.index({
+    setter: 1,
+    status: 1
+});
+
+leadSchema.index({
+    closer: 1,
+    status: 1
+});
 
 const Lead = mongoose.model("Lead", leadSchema);
 

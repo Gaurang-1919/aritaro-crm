@@ -57,5 +57,11 @@ const meetingSchema = new mongoose.Schema(
   }
 );
 
+meetingSchema.index({ setter: 1 });
+meetingSchema.index({ closer: 1 });
+meetingSchema.index({ meetingDate: 1 });
+meetingSchema.index({ status: 1 });
+
 const Meeting = mongoose.model("Meeting", meetingSchema);
+
 export default Meeting;
