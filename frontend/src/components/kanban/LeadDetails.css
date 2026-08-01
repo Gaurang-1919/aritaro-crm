@@ -1,0 +1,35 @@
+.drawer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  justify-content:flex-end;
+  z-index:999;
+}
+
+.drawer{
+  width:420px;
+  background:#fff;
+  height:100vh;
+  padding:25px;
+  overflow:auto;
+}
+
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.drawer-header button{
+  border:none;
+  background:#eee;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.drawer-body p{
+  margin:12px 0;
+}
