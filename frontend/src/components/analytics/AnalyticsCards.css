@@ -1,0 +1,48 @@
+.analytics-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  margin-bottom:30px;
+}
+
+.analytics-card{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.analytics-icon{
+  width:60px;
+  height:60px;
+  border-radius:12px;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:24px;
+}
+
+.analytics-content{
+  flex:1;
+}
+
+.analytics-content p{
+  margin:0;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.analytics-content h2{
+  margin:8px 0;
+  font-size:28px;
+}
+
+.analytics-content span{
+  color:#16a34a;
+  font-size:13px;
+  font-weight:600;
+}
