@@ -1,5 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+
 import Layout from "./components/layout/Layout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 import Dashboard from "./pages/Dashboard";
 import LeadLog from "./pages/LeadLog";
@@ -16,7 +21,18 @@ import Projection from "./pages/Projection";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="leads" element={<LeadLog />} />
@@ -30,6 +46,7 @@ function App() {
         <Route path="revenue" element={<Revenue />} />
         <Route path="projection" element={<Projection />} />
       </Route>
+
     </Routes>
   );
 }

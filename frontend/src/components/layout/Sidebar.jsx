@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaUsers,
@@ -12,9 +12,14 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
+import { useAuth } from "../../context/AuthContext";
+
 import "./Sidebar.css";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
   const menuItems = [
     {
       title: "Dashboard",
@@ -63,6 +68,11 @@ const Sidebar = () => {
     },
   ];
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <aside className="sidebar">
 
@@ -71,7 +81,6 @@ const Sidebar = () => {
       </div>
 
       <nav className="menu">
-
         {menuItems.map((item) => (
           <NavLink
             key={item.title}
@@ -84,17 +93,15 @@ const Sidebar = () => {
             <span>{item.title}</span>
           </NavLink>
         ))}
-
       </nav>
 
       <div className="logout">
-
-        <button>
+        <button onClick={handleLogout}>
           <FaSignOutAlt />
           <span>Logout</span>
         </button>
-
       </div>
+
     </aside>
   );
 };
