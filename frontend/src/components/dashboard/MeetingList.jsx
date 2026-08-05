@@ -1,57 +1,75 @@
+import { useEffect, useState } from "react";
+
+import { getLeads } from "../../api/leadApi";
+
 import "./MeetingList.css";
 
-const meetings = [
-  {
-    name: "John Doe",
-    company: "Google",
-    time: "10:00 AM",
-  },
-  {
-    name: "Sarah Smith",
-    company: "Microsoft",
-    time: "12:30 PM",
-  },
-  {
-    name: "Rahul Sharma",
-    company: "Amazon",
-    time: "03:00 PM",
-  },
-  {
-    name: "Amit Kumar",
-    company: "Netflix",
-    time: "05:15 PM",
-  },
-];
-
 const MeetingList = () => {
+
+  const [meetings, setMeetings] = useState([]);
+
+  useEffect(() => {
+    fetchMeetings();
+  }, []);
+
+  const fetchMeetings = async () => {
+
+    try {
+
+      const res = await getLeads();
+
+      const leads = res.data.data.leads || [];
+
+      const meetingLeads = leads
+        .filter((lead) => lead.meetingDate)
+        .slice(0, 5);
+
+      setMeetings(meetingLeads);
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
   return (
     <div className="meeting-card">
-
-      <h2>Today's Meetings</h2>
+      <h2>Upcoming Meetings</h2>
 
       <div className="meeting-list">
+        {meetings.length === 0 ? (
+          <p>No Meetings</p>
 
-        {meetings.map((meeting, index) => (
+        ) : (
 
-          <div className="meeting-item" key={index}>
+          meetings.map((meeting) => (
 
-            <div className="avatar">
-              {meeting.name.charAt(0)}
+            <div
+              className="meeting-item"
+              key={meeting._id}
+            >
+
+              <div className="avatar">
+                {meeting.leadName.charAt(0)}
+              </div>
+
+              <div className="meeting-info">
+
+                <h4>{meeting.leadName}</h4>
+
+                <p>{meeting.company || "-"}</p>
+
+              </div>
+              <span>
+                {new Date(
+                  meeting.meetingDate
+                ).toLocaleDateString()}
+              </span>
             </div>
-
-            <div className="meeting-info">
-
-              <h4>{meeting.name}</h4>
-
-              <p>{meeting.company}</p>
-
-            </div>
-
-            <span>{meeting.time}</span>
-
-          </div>
-
-        ))}
+          ))
+        )}
 
       </div>
 

@@ -7,11 +7,11 @@ const createConversation = asyncHandler(async (req, res) => {
     const conversation = await Conversation.create(req.body);
 
     return res.status(201).json(
-        new apiresponse(
-            201,
-            "Conversation created successfully",
-            conversation
-        )
+       new apiresponse(
+              200,
+              conversations,
+              "Conversations fetched successfully"
+            )
     );
 });
 
@@ -22,11 +22,11 @@ const getAllConversations = asyncHandler(async (req, res) => {
         .sort({ createdAt: -1 });
 
     return res.status(200).json(
-        new apiresponse(
-            200,
-            "Conversations fetched successfully",
-            conversations
-        )
+          new apiresponse(
+              200,
+              conversations,
+             "Conversations fetched successfully"
+            )
     );
 });
 
@@ -41,10 +41,10 @@ const getConversationById = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new apiresponse(
-            200,
-            "Conversation fetched successfully",
-            conversation
-        )
+             200,
+             conversations,
+             "Conversations fetched successfully"
+            )
     );
 });
 
@@ -64,10 +64,10 @@ const updateConversation = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new apiresponse(
-            200,
-            "Conversation updated successfully",
-            conversation
-        )
+             200,
+             conversations,
+             "Conversations fetched successfully"
+            )
     );
 });
 
