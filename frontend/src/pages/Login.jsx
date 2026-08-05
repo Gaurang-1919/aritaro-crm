@@ -30,11 +30,14 @@ const Login = () => {
       setLoading(true);
       setError("");
 
-      const res = await loginApi(formData);
+          const res = await loginApi(formData);
+        login(
+               res.data.message.user,
+                res.data.message.accessToken
+        );
+       navigate("/dashboard");
 
-      login(res.data.data.user, res.data.data.accessToken);
 
-      navigate("/dashboard");
     } catch (err) {
       setError(
         err.response?.data?.message || "Login failed"
