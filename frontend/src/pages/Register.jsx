@@ -17,26 +17,34 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
-      setError("");
+    setLoading(true);
+    setError("");
 
-      await registerApi(formData);
+    try {
+      const res = await registerApi(formData);
+
+      console.log("Register Success:", res.data);
 
       navigate("/login");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed"
-      );
+      console.error("REGISTER ERROR:", err);
+
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.[0]?.msg ||
+        err.message ||
+        "Registration failed";
+
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -55,6 +63,7 @@ const Register = () => {
           placeholder="Full Name"
           value={formData.name}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -63,6 +72,7 @@ const Register = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -71,6 +81,7 @@ const Register = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          required
         />
 
         <select
@@ -83,7 +94,7 @@ const Register = () => {
           <option value="admin">Admin</option>
         </select>
 
-        <button disabled={loading}>
+        <button type="submit" disabled={loading}>
           {loading ? "Creating..." : "Register"}
         </button>
 
