@@ -20,14 +20,22 @@ const LeadTable = () => {
 
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchLeads = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const res = await getLeads();
 
-      setLeads(res.data.data || []);
+      setLeads(res.data?.data?.leads || []);
     } catch (err) {
       console.error(err);
+      setError(
+        err.response?.data?.message ||
+        "Failed to load leads."
+      );
     } finally {
       setLoading(false);
     }
@@ -43,15 +51,25 @@ const LeadTable = () => {
     try {
       await deleteLead(id);
 
-      setLeads((prev) => prev.filter((lead) => lead._id !== id));
+      setLeads((prev) =>
+        prev.filter((lead) => lead._id !== id)
+      );
     } catch (err) {
       console.error(err);
-      alert("Unable to delete lead.");
+
+      alert(
+        err.response?.data?.message ||
+        "Unable to delete lead."
+      );
     }
   };
 
   if (loading) {
     return <h3>Loading...</h3>;
+  }
+
+  if (error) {
+    return <h3>{error}</h3>;
   }
 
   if (!leads.length) {
@@ -81,7 +99,7 @@ const LeadTable = () => {
 
               <td>{lead.email || "-"}</td>
 
-              <td>{lead.phone}</td>
+              <td>{lead.phone || "-"}</td>
 
               <td>
                 <StatusBadge status={lead.status} />
@@ -108,7 +126,9 @@ const LeadTable = () => {
 
                 <button
                   title="Delete"
-                  onClick={() => handleDelete(lead._id)}
+                  onClick={() =>
+                    handleDelete(lead._id)
+                  }
                 >
                   <FaTrash />
                 </button>
