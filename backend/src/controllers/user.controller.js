@@ -30,5 +30,12 @@ const userRegister = asyncHandler(async (req, res) => {
         )
     );
 });
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find().select("-password");
+    return res.status(200).json(
+        new apiresponse(200, users, "Users fetched successfully")
+    );
+});
 
-export default userRegister;
+export { userRegister, getAllUsers };
+
